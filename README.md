@@ -7,7 +7,7 @@ I've created this for my personal use and have released it as is, avoid using it
 # Installation
 > - Install nodejs on your computer.  
 > - Download/Git clone repo.  
-> - Add your wallet details in autoRebake.js ***(This bot requires your private keys to work, be extremely cautious.)***.  
+> - Add your wallet details in config.ini ***(This bot requires your private keys to work, be extremely cautious.)***.  
 > - Run npm install.  
 > - Run node bbAutorebake.js to start the bot.  
 > - You may pass arguments to change default settings.  
