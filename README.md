@@ -1,0 +1,2 @@
+# minersAutoCompound
+ Autocompounds miner dApps
