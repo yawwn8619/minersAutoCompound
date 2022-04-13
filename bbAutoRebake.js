@@ -78,7 +78,7 @@ web3.eth.accounts.wallet.add(pKey);
 var contAddress = '0xE2D26507981A4dAaaA8040bae1846C14E0Fb56bF';
 var refAdd = '0x925fC333497D833478C2947898209454202996b1';
 const contract = new web3.eth.Contract(abi, contAddress, {gasPrice: gPrice});
-var gPrice = '20000000000';
+var gPrice = '6000000000';
 
 
 // Init
@@ -118,7 +118,7 @@ function rebakeBeans(){
         if (rewards>rebakeAmount){
             console.log('Rebaking');
 
-            contract.methods.hatchEggs(refAdd).send({from: addr, gasPrice: gPrice, gas: 60000 })
+            contract.methods.hatchEggs(refAdd).send({from: addr, gasPrice: gPrice, gas: 80000 })
             .on('transactionHash', function (hash) {
                 console.log('Transaction Hash: ', hash);
             })
