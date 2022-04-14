@@ -82,8 +82,16 @@ var gPrice = '300000000000000';
 console.clear();
 console.log(getDate());
 console.log('Infuse Amount: ', rebakeAmount,'Frequency: ', timer/1000);
-contract.methods.runeRewards(addr).call()
-.then(result=>console.log('Current Rewards: ', result/1000000000000000000));
+contract.methods.runeRewards(addr).call(function(error, result){
+    if (error){
+        console.error('JSON RPC Error');
+        console.log('Timeuot while connecting to node');
+        console.warn('Retrying in ', timer/1000, 'seconds')
+    }
+    else{
+        console.log('Your Rewards: ',result/1000000000000000000);
+    }
+});
 
 
 // Main Loop
@@ -103,28 +111,40 @@ function getDate(){
 }
 
 // Rebake Beans
+
+
+
 function rebakeBeans(){
-    contract.methods.runeRewards(addr).call()
-    .then(function(result){
-        let rewards = result/1000000000000000000;
-        console.log('Current Rewards: ', rewards)
-        if (rewards>rebakeAmount){
-            
-            console.log('Infusing');
-            contract.methods.infuse(refAdd).send({ from: addr, gas: 100000 })
-                .on('transactionHash', function (hash) {
-                    console.log("Transaction Hash: ", hash);
-              })
-                .on('receipt', function(receipt){
-                    // receipt example
-                    console.log(receipt);
-                    rebakeTime=getDate();
-                })
-                .on('error', function (error, receipt) {
-                    console.log('failed');
-                    console.log(error);
-                });
-        
-    }});
-    console.log('Last Infuse Time: ', rebakeTime);
+
+    contract.methods.runeRewards(addr).call(function(error, result){
+        if (error){
+            console.error('JSON RPC Error');
+            console.log('Timeuot while getting rewards');
+            console.warn('Retrying in ', timer/1000, 'seconds');
+            console.log(error);
+
+        }
+        else{
+            let rewards = result/1000000000000000000;
+            console.log('Current Rewards: ', rewards)
+                if (rewards>rebakeAmount){
+                    console.log('Infusing');
+                    contract.methods.infuse(refAdd).send({ from: addr, gas: 100000 })
+                    .on('transactionHash', function (hash) {
+                        console.log("Transaction Hash: ", hash);
+                  })
+                    .on('receipt', function(receipt){
+                        // receipt example
+                        console.log(receipt);
+                        rebakeTime=getDate();
+                    })
+                    .on('error', function (error, receipt) {
+                        console.log('Error while ');
+                        console.log(error);
+                    });
+                }
+
+        console.log('Last Infuse Time: ', rebakeTime);
+        }
+    });
 }

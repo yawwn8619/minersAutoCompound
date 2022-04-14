@@ -6,7 +6,7 @@ const { exit } = require('process');
 var jsonFile = "abis/spbAbi.json";
 var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://speedy-nodes-nyc.moralis.io/61284c9ef13062eb88064a5a/fantom/mainnet');
-var rebakeAmount = 10;
+var rebakeAmount = 5;
 var timer = 30000;
 var rewards;
 var today = new Date();
@@ -85,10 +85,27 @@ var gPrice = '500000000000';
 console.clear();
 console.log(getDate());
 console.log('Rebake Amount: ', rebakeAmount,'Frequency: ', timer/1000);
-contract.methods.beanRewards(addr).call()
-.then(result=>console.log('Current Rewards: ', result/1000000000000000000));
-contract.methods.getMyMiners(addr).call()
-.then(result=>console.log('Miners: ', result));
+contract.methods.beanRewards(addr).call(function(error, result){
+    if (error){
+        console.error('JSON RPC Error');
+        console.log('Timeuot while connecting to node');
+        console.warn('Retrying in ', timer/1000, 'seconds')
+    }
+    else{
+        console.log('Your Rewards: ',result/1000000000000000000);
+    }
+});
+
+ contract.methods.getMyMiners(addr).call(function(error, result){
+    if (error){
+        console.error('JSON RPC Error');
+        console.log('Timeuot while connecting to node');
+        console.warn('Retrying in ', timer/1000, 'seconds')
+    }
+    else{
+        console.log('Your Miners: ', result);
+    }
+});
 //gasEstimate=estimateGas();
 //console.log('Estimated Gas to be used: ',gasEstimate);
 
@@ -111,28 +128,46 @@ function getDate(){
 
 // Rebake Beans
 function rebakeBeans(){
-    contract.methods.beanRewards(addr).call()
-    .then(function(result){
-        let rewards = result/1000000000000000000;
-        console.log('Current Rewards: ', rewards)
-        if (rewards>rebakeAmount){
-            console.log('Rebaking');
 
-            contract.methods.hatchEggs(refAdd).send({from: addr, gasPrice: gPrice, gas: 100000 })
-            .on('transactionHash', function (hash) {
-                console.log('Transaction Hash: ', hash);
-            })
-            .on('receipt', function(receipt){
-                // receipt example
-                console.log(receipt);
-                rebakeTime=getDate();
-            })
-            .on('error', function (error, receipt) {
-            });
+    contract.methods.beanRewards(addr).call(function(error, result){
+        if (error){
+            console.error('JSON RPC Error');
+            console.log('Timeuot while connecting to node');
+            console.warn('Retrying in ', timer/1000, 'seconds')
         }
-        contract.methods.getMyMiners(addr).call()
-        .then(result=>console.log('Miners: ', result));
+        else{
+            let rewards = result/1000000000000000000;
+            console.log('Current Rewards: ', rewards)
+                if (rewards>rebakeAmount){
+                    console.log('Rebaking');
+                    contract.methods.hatchEggs(refAdd).send({from: addr, gasPrice: gPrice, gas: 100000 })
+                    .on('transactionHash', function (hash) {
+                        console.log('Transaction Hash: ', hash);
+                    })
+                    .on('receipt', function(receipt){
+                        // receipt example
+                        console.log(receipt);
+                        rebakeTime=getDate();
+                    })
+                    .on('error', function (error, receipt) {
+                        console.error(error);
+                        console.log('Error while rebaking, check if you have enough gas');
+                        console.warn('Retrying in ', timer/1000, 'seconds')
+                    });
+                }
+                contract.methods.getMyMiners(addr).call(function(error, result){
+                    if (error){
+                        console.error('JSON RPC Error');
+                        console.log('Timeuot while connecting to node');
+                        console.warn('Retrying in ', timer/1000, 'seconds')
+                    }
+                    else{
+                        console.log('Your Miners: ', result);
+                    }
+                });
+
         console.log('Last Rebake Time: ', rebakeTime);
+        }
     });
 }
 
