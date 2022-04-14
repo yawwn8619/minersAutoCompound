@@ -131,7 +131,7 @@ function rebakeBeans(){
     contract.methods.beanRewards(addr).call(function(error, result){
         if (error){
             console.error('JSON RPC Error');
-            console.log('Timeuot while connecting to node');
+            console.log('Timeuot while getting rewards');
             console.warn('Retrying in ', timer/1000, 'seconds')
         }
         else{
@@ -157,7 +157,7 @@ function rebakeBeans(){
                 contract.methods.getMyMiners(addr).call(function(error, result){
                     if (error){
                         console.error('JSON RPC Error');
-                        console.log('Timeuot while connecting to node');
+                        console.log('Timeuot while miners');
                         console.warn('Retrying in ', timer/1000, 'seconds')
                     }
                     else{
