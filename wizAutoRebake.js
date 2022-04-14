@@ -139,7 +139,7 @@ function rebakeBeans(){
                         rebakeTime=getDate();
                     })
                     .on('error', function (error, receipt) {
-                        console.log('Error while ');
+                        console.log('Error while infusing');
                         console.log(error);
                     });
                 }

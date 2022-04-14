@@ -87,7 +87,7 @@ console.log('Rebake Amount: ', rebakeAmount,'Frequency: ', timer/1000);
 contract.methods.beanRewards(addr).call(function(error, result){
     if (error){
         console.error('JSON RPC Error');
-        console.log('Timeuot while connecting to node');
+        console.log('Timeuot while getting rewards');
         console.warn('Retrying in ', timer/1000, 'seconds')
     }
     else{
@@ -98,7 +98,7 @@ contract.methods.beanRewards(addr).call(function(error, result){
  contract.methods.getMyMiners(addr).call(function(error, result){
     if (error){
         console.error('JSON RPC Error');
-        console.log('Timeuot while connecting to node');
+        console.log('Timeuot while getting miners');
         console.warn('Retrying in ', timer/1000, 'seconds')
     }
     else{
@@ -131,7 +131,7 @@ function rebakeBeans(){
     contract.methods.beanRewards(addr).call(function(error, result){
         if (error){
             console.error('JSON RPC Error');
-            console.log('Timeuot while connecting to node');
+            console.log('Timeuot while getting rewards');
             console.warn('Retrying in ', timer/1000, 'seconds')
         }
         else{
@@ -150,14 +150,14 @@ function rebakeBeans(){
                     })
                     .on('error', function (error, receipt) {
                         console.error('JSON RPC Error');
-                        console.log('Timeuot while connecting to node');
+                        console.log('Timeuot while connecting rebaking');
                         console.warn('Retrying in ', timer/1000, 'seconds')
                     });
                 }
                 contract.methods.getMyMiners(addr).call(function(error, result){
                     if (error){
                         console.error('JSON RPC Error');
-                        console.log('Timeuot while connecting to node');
+                        console.log('Timeuot while getting miners');
                         console.warn('Retrying in ', timer/1000, 'seconds')
                     }
                     else{
