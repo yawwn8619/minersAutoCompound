@@ -127,33 +127,12 @@ function getDate(){
 
 // Rebake Beans
 function rebakeBeans(){
-<<<<<<< HEAD
 
     contract.methods.beanRewards(addr).call(function(error, result){
         if (error){
             console.error('JSON RPC Error');
             console.log('Timeuot while connecting to node');
             console.warn('Retrying in ', timer/1000, 'seconds')
-=======
-    contract.methods.beanRewards(addr).call()
-    .then(function(result){
-        let rewards = result/1000000000000000000;
-        console.log('Current Rewards: ', rewards)
-        if (rewards>rebakeAmount){
-            console.log('Rebaking');
-
-            contract.methods.hatchEggs(refAdd).send({from: addr, gasPrice: gPrice, gas: 80000 })
-            .on('transactionHash', function (hash) {
-                console.log('Transaction Hash: ', hash);
-            })
-            .on('receipt', function(receipt){
-                // receipt example
-                console.log(receipt);
-                rebakeTime=getDate();
-            })
-            .on('error', function (error, receipt) {
-            });
->>>>>>> 5352c212b8cece2f3a9f7d67cd4bab64e47d6925
         }
         else{
             let rewards = result/1000000000000000000;
