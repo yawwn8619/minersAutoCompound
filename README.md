@@ -1,5 +1,5 @@
 # Miners Auto Compound
-Autorebakes your beans based on conditions.  
+Auto re-compounds your miners based on conditions.  
 I've created this for my personal use and have released it as is, avoid using it if you are not familier with running terminal commands.  
 
 ## This is a nodejs script.
