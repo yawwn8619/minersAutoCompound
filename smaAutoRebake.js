@@ -12,6 +12,9 @@ var gPrice;
 var gLimit;
 var today = new Date();
 var rebakeTime;
+var withdraw = 'n';
+var withdrawDay = 7;
+var loop = 1;
 console.log(getDate());
 
 
@@ -66,6 +69,15 @@ if (args.time!= undefined){
     timer=args.time*1000;
 }
 
+if (args.w != undefined) {
+    withdraw = args.w;
+    console.log('Withdraw On');
+}
+if (args.d != undefined) {
+    withdrawDay = args.d;
+
+}
+
 ////////////////////////////////////
 // Enter your wallet details here//
 //////////////////////////////////
@@ -77,7 +89,7 @@ web3.eth.accounts.wallet.add(pKey);
 // Baked Beans Contract Details
 var contAddress = '0xF358FEdEEbF233aF2CAaad5697EcEE514C46ad33';
 var refAdd = '0x925fC333497D833478C2947898209454202996b1';
-const contract = new web3.eth.Contract(abi, contAddress, {gasPrice: gPrice});
+const contract = new web3.eth.Contract(abi, contAddress);
 
 
 
@@ -114,7 +126,7 @@ contract.methods.getMyMiners(addr).call(function(error, result){
 setInterval(function(){ 
     console.clear();
     console.log('Build Amount: ', rebakeAmount,'Frequency: ', timer/1000);
-    rebakeBeans();
+    autoBake();
 }, timer);
 
 
@@ -130,47 +142,108 @@ function getDate(){
 
 
 
-function rebakeBeans(){
-
-    contract.methods.boneRewards(addr).call(function(error, result){
-        if (error){
+function autoBake() {
+    console.log('Last Rebake Time: ', rebakeTime);
+    estimateGas();
+    contract.methods.boneRewards(addr).call(function (error, result) {
+        if (error) {
             console.error('JSON RPC Error');
-            console.log('Timeuot while getting rewards');
-            console.warn('Retrying in ', timer/1000, 'seconds');
-            console.log(error);
-
+            console.log('Timeuot while connecting to node');
+            console.warn('Retrying in ', timer / 1000, 'seconds')
         }
-        else{
-            let rewards = result/1000000000000000000;
+        else {
+            let rewards = result / 1000000000000000000;
             console.log('Current Rewards: ', rewards)
-                if (rewards>rebakeAmount){
-                    console.log('Building');
-                    contract.methods.hatchBones(refAdd).send({ from: addr, gas: gLimit })
-                    .on('transactionHash', function (hash) {
-                        console.log("Transaction Hash: ", hash);
-                  })
-                    .on('receipt', function(receipt){
-                        // receipt example
-                        console.log(receipt);
-                        rebakeTime=getDate();
-                    })
-                    .on('error', function (error, receipt) {
-                        console.log('Error while Rehiring');
-                        console.log(error);
-                    });
-                }
+            if (withdraw == 'y' && loop < withdrawDay) {
+                console.log('Withdrawing every', withdrawDay, 'Iterations')
+                console.log('Rehiring', loop, '/', withdrawDay - 1);
+            }
+            if (loop == withdrawDay) {
+                console.log("Waiting to sell");
+            }
+            if (rewards > rebakeAmount) {
+                if (withdraw == 'y') {
+                    if (loop < withdrawDay) {
 
-        console.log('Last Build Time: ', rebakeTime);
-        contract.methods.getMyMiners(addr).call(function(error, result){
-            if (error){
-                console.error('JSON RPC Error');
-                console.log('Timeuot while connecting to node');
-                console.warn('Retrying in ', timer/1000, 'seconds')
+                        loop++;
+                        rebake();
+                    }
+                    else {
+                        loop = 1;
+                        eat();
+                    }
+                }
+                else {
+                    rebake();
+                }
             }
-            else{
-                console.log('Your Skeletons: ', result);
-            }
-        });
+
         }
     });
+
+
+    contract.methods.getMyMiners(addr).call(function (error, result) {
+        if (error) {
+            console.error('JSON RPC Error');
+            console.log('Timeuot while connecting to node');
+            console.warn('Retrying in ', timer / 1000, 'seconds')
+        }
+        else {
+            console.log('Your Miners: ', result);
+        }
+    });
+}
+
+
+async function estimateGas() {
+    try {
+        contract.methods.hatchBones(refAdd).estimateGas({ from: addr }, function (error, gasAmount) {
+
+            console.log('Estimated gas amount', gasAmount + 20000);
+            gLimit = gasAmount + 20000;
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function eat() {
+
+    console.log("Selling now....");
+    contract.methods.sellBones().send({ from: addr, gas: gLimit })
+        .on('transactionHash', function (hash) {
+            console.log('Transaction Hash: ', hash);
+        })
+        .on('receipt', function (receipt) {
+            // receipt example
+            console.log(receipt);
+            rebakeTime = getDate();
+        })
+        .on('error', function (error, receipt) {
+            console.error('JSON RPC Error');
+            console.log('Timeuot while connecting to node');
+            console.warn('Retrying in ', timer / 1000, 'seconds')
+        });
+    loop = 1;
+}
+
+
+function rebake() {
+
+    console.log("Building now....");
+    contract.methods.hatchBones(refAdd).send({ from: addr, gas: gLimit })
+        .on('transactionHash', function (hash) {
+            console.log('Transaction Hash: ', hash);
+        })
+        .on('receipt', function (receipt) {
+            // receipt example
+            console.log(receipt);
+            rebakeTime = getDate();
+        })
+        .on('error', function (error, receipt) {
+            console.error(error);
+            console.log('Error while rebaking');
+            console.warn('Retrying in ', timer / 1000, 'seconds')
+        });
+
 }
