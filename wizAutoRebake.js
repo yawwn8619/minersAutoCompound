@@ -6,9 +6,10 @@ const { exit } = require('process');
 var jsonFile = "abis/wizAbi.json";
 var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://evm-cronos.crypto.org');
-var rebakeAmount = 50;
+var rebakeAmount = .1;
 var timer = 60000;
-var rewards;
+var gPrice;
+var gLimit;
 var today = new Date();
 var rebakeTime;
 console.log(getDate());
@@ -48,7 +49,8 @@ function parseINIString(data){
 var data = fs.readFileSync('config.ini', 'utf8');
 var javascript_ini = parseINIString(data);
 
-
+gPrice= javascript_ini['CRO'].GAS_P;
+gLimit= javascript_ini['CRO'].GAS_L;
 
 
 // Capture arguments
@@ -129,7 +131,7 @@ function rebakeBeans(){
             console.log('Current Rewards: ', rewards)
                 if (rewards>rebakeAmount){
                     console.log('Infusing');
-                    contract.methods.infuse(refAdd).send({ from: addr, gas: 100000 })
+                    contract.methods.infuse(refAdd).send({ from: addr, gas: gLimit })
                     .on('transactionHash', function (hash) {
                         console.log("Transaction Hash: ", hash);
                   })
@@ -139,7 +141,7 @@ function rebakeBeans(){
                         rebakeTime=getDate();
                     })
                     .on('error', function (error, receipt) {
-                        console.log('Error while infusing');
+                        console.log('Error while ');
                         console.log(error);
                     });
                 }

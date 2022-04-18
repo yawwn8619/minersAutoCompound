@@ -6,9 +6,10 @@ const { exit } = require('process');
 var jsonFile = "abis/ffAbi.json";
 var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://speedy-nodes-nyc.moralis.io/61284c9ef13062eb88064a5a/avalanche/mainnet');
-var rebakeAmount = 1;
+var rebakeAmount = .5;
 var timer = 30000;
-var rewards;
+var gPrice;
+var gLimit;
 var today = new Date();
 var rebakeTime;
 console.log(getDate());
@@ -49,6 +50,8 @@ var data = fs.readFileSync('config.ini', 'utf8');
 var javascript_ini = parseINIString(data);
 
 
+gPrice= javascript_ini['AVAX'].GAS_P;
+gLimit= javascript_ini['AVAX'].GAS_L;
 
 
 // Capture arguments
@@ -143,7 +146,7 @@ function rebakeBeans(){
             console.log('Current Rewards: ', rewards)
                 if (rewards>rebakeAmount){
                     console.log('Rehiring');
-                    contract.methods.rehireFishers(refAdd).send({ from: addr, gas: 1000000 })
+                    contract.methods.rehireFishers(refAdd).send({ from: addr, gas: gLimit })
                     .on('transactionHash', function (hash) {
                         console.log("Transaction Hash: ", hash);
                   })

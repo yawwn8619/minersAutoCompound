@@ -8,12 +8,11 @@ var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://speedy-nodes-nyc.moralis.io/61284c9ef13062eb88064a5a/fantom/mainnet');
 var rebakeAmount = 10;
 var timer = 30000;
-var rewards;
 var today = new Date();
 var rebakeTime;
-var gasEstimate;
-var walletDetails;
 console.log(getDate());
+var gPrice;
+var gLimit;
 
 
 
@@ -51,6 +50,8 @@ function parseINIString(data){
 var data = fs.readFileSync('config.ini', 'utf8');
 var javascript_ini = parseINIString(data);
 
+gPrice= javascript_ini['FTM'].GAS_P;
+gLimit= javascript_ini['FTM'].GAS_L;
 
 
 // Capture arguments
@@ -70,6 +71,7 @@ if (args.time!= undefined){
 //////////////////////////////////
 var addr = javascript_ini['WALLET'].ADDRESS;
 var pKey = javascript_ini['WALLET'].P_KEY;
+console.log(addr. pKey);
 web3.eth.accounts.wallet.add(pKey);
 
 
@@ -77,7 +79,7 @@ web3.eth.accounts.wallet.add(pKey);
 var contAddress = '0x63690090B52B1E6E685b88Ca365596b8edb0F379';
 var refAdd = '0x925fC333497D833478C2947898209454202996b1';
 const contract = new web3.eth.Contract(abi, contAddress, {gasPrice: gPrice});
-var gPrice = '500000000000';
+
 
 
 // Init
@@ -131,7 +133,7 @@ function rebakeBeans(){
     contract.methods.beanRewards(addr).call(function(error, result){
         if (error){
             console.error('JSON RPC Error');
-            console.log('Timeuot while getting rewards');
+            console.log('Timeuot while connecting to node');
             console.warn('Retrying in ', timer/1000, 'seconds')
         }
         else{
@@ -139,7 +141,7 @@ function rebakeBeans(){
             console.log('Current Rewards: ', rewards)
                 if (rewards>rebakeAmount){
                     console.log('Rebaking');
-                    contract.methods.hatchEggs(refAdd).send({from: addr, gasPrice: gPrice, gas: 100000 })
+                    contract.methods.hatchEggs(refAdd).send({from: addr, gasPrice: gPrice, gas: gLimit })
                     .on('transactionHash', function (hash) {
                         console.log('Transaction Hash: ', hash);
                     })
@@ -157,7 +159,7 @@ function rebakeBeans(){
                 contract.methods.getMyMiners(addr).call(function(error, result){
                     if (error){
                         console.error('JSON RPC Error');
-                        console.log('Timeuot while miners');
+                        console.log('Timeuot while connecting to node');
                         console.warn('Retrying in ', timer/1000, 'seconds')
                     }
                     else{
