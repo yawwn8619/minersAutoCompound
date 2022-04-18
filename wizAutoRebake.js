@@ -6,7 +6,7 @@ const { exit } = require('process');
 var jsonFile = "abis/wizAbi.json";
 var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://evm-cronos.crypto.org');
-var rebakeAmount = .1;
+var rebakeAmount = 50;
 var timer = 60000;
 var gPrice;
 var gLimit;
