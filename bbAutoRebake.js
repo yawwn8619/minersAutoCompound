@@ -3,7 +3,6 @@ const args = require('yargs').argv;
 
 var fs = require('fs');
 const { exit } = require('process');
-const { EADDRNOTAVAIL } = require('constants');
 var jsonFile = "abis/bbAbi.json";
 var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://speedy-nodes-nyc.moralis.io/61284c9ef13062eb88064a5a/bsc/mainnet');

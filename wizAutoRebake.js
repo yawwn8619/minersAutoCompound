@@ -87,7 +87,7 @@ web3.eth.accounts.wallet.add(pKey);
 // Baked Beans Contract Details
 var contAddress = '0x621eFfE756Ea258Db26c9c5c3E2fE5583a469870';
 var refAdd = '0x925fC333497D833478C2947898209454202996b1';
-const contract = new web3.eth.Contract(abi, contAddress, {gasPrice: gPrice});
+const contract = new web3.eth.Contract(abi, contAddress);
 
 
 // Init
