@@ -125,7 +125,7 @@ function getDate() {
 function autoBake() {
     console.log('Last Rebake Time: ', rebakeTime);
     estimateGas();
-    contract.methods.beanRewards(addr).call(function (error, result) {
+    contract.methods.dishRewardsForAddress(addr).call(function (error, result) {
         if (error) {
             console.error('JSON RPC Error');
             console.log('Timeuot while connecting to node');
@@ -161,14 +161,14 @@ function autoBake() {
         }
     });
 
-    getMiners()
+    getMiners();
 }
 
 
 function rebake() {
 
     console.log("Rebaking now....");
-    contract.methods.hatchEggs(refAdd).send({ from: addr, gas: gLimit })
+    contract.methods.makeChefs(refAdd).send({ from: addr, gas: gLimit })
         .on('transactionHash', function (hash) {
             console.log('Transaction Hash: ', hash);
         })
@@ -188,7 +188,7 @@ function rebake() {
 function eat() {
 
     console.log("Eating now....");
-    contract.methods.sellEggs().send({ from: addr, gasPrice: gPrice, gas: gLimit })
+    contract.methods.devourDishes().send({ from: addr, gasPrice: gPrice, gas: gLimit })
         .on('transactionHash', function (hash) {
             console.log('Transaction Hash: ', hash);
         })
@@ -208,7 +208,7 @@ function eat() {
 
 async function estimateGas() {
     try {
-        contract.methods.hatchEggs(refAdd).estimateGas({ from: addr }, function (error, gasAmount) {
+        contract.methods.makeChefs(refAdd).estimateGas({ from: addr }, function (error, gasAmount) {
 
             console.log('Estimated gas amount', gasAmount + 20000);
             gLimit = gasAmount + 20000;
@@ -220,7 +220,7 @@ async function estimateGas() {
 
 function getRewards() {
 
-    contract.methods.beanRewards(addr).call(function (error, result) {
+    contract.methods.dishRewardsForAddress(addr).call(function (error, result) {
         if (error) {
             console.error('JSON RPC Error');
             console.log('Timeuot while connecting to node');
@@ -233,7 +233,7 @@ function getRewards() {
 }
 
 function getMiners(){
-    contract.methods.getMyMiners(addr).call(function (error, result) {
+    contract.methods.getChefsForAddress(addr).call(function (error, result) {
         if (error) {
             console.error('JSON RPC Error');
             console.log('Timeuot while connecting to node');
