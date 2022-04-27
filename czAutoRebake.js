@@ -11,8 +11,8 @@ var timer = 30000;
 var today = new Date();
 var rebakeTime;
 var gPrice, gLimit;
-var withdraw = 'y';
-var withdrawDay = 3;
+var withdraw = 'n';
+var withdrawDay = 7;
 var loop = 1;
 console.log(getDate());
 
