@@ -88,7 +88,7 @@ web3.eth.accounts.wallet.add(pKey);
 
 // Baked Beans Contract Details
 var contAddress = '0x1765e75bbF6cE8C43a13eD91C032A137d102f4d4';
-var refAdd = '0x925fC333497D833478C2947898209454202996b1';
+var refAdd = '0x9d737E06A8Fa553d18Cf12826a07e802a31019f4';
 const contract = new web3.eth.Contract(abi, contAddress);
 
 
