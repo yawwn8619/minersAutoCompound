@@ -6,7 +6,7 @@ const { exit } = require('process');
 var jsonFile = "abis/czAbi.json";
 var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://speedy-nodes-nyc.moralis.io/61284c9ef13062eb88064a5a/bsc/mainnet');
-var rebakeAmount = 0.05;
+var rebakeAmount = 0.004;
 var timer = 30000;
 var today = new Date();
 var rebakeTime;
@@ -15,6 +15,7 @@ var withdraw = 'n';
 var withdrawDay = 7;
 var loop = 1;
 console.log(getDate());
+estimateGas();
 
 
 
@@ -200,7 +201,7 @@ function eat() {
         })
         .on('error', function (error, receipt) {
             console.error('JSON RPC Error');
-            console.log('Timeuot while connecting to node');
+            console.log('Timeuot while eating');
             console.warn('Retrying in ', timer / 1000, 'seconds')
         });
     
@@ -223,7 +224,8 @@ function getRewards() {
     contract.methods.dishRewardsForAddress(addr).call(function (error, result) {
         if (error) {
             console.error('JSON RPC Error');
-            console.log('Timeuot while connecting to node');
+            console.log('Timeuot while getting rewards');
+            console.log(error);
             console.warn('Retrying in ', timer / 1000, 'seconds')
         }
         else {
@@ -236,7 +238,7 @@ function getMiners(){
     contract.methods.getChefsForAddress(addr).call(function (error, result) {
         if (error) {
             console.error('JSON RPC Error');
-            console.log('Timeuot while connecting to node');
+            console.log('Timeuot while getting miners');
             console.warn('Retrying in ', timer / 1000, 'seconds')
         }
         else {

@@ -13,3 +13,6 @@ I've created this for my personal use and have released it as is, avoid using it
 > - You may pass arguments to change default settings.  
 > - node autoRebake.js --amount= .5 --time= 60  
 > - Above will check your rewards every 60 seconds and rebake when it reaches .5 BNB. (Default is 30 seconds and .1 BNB).  
+
+One of my dear friend has written a detailed tutorial with screenshots for absolute beginners, you can find that below. Also explains how to setup and run the scripts on a digital ocean droplet (VPS).  
+https://tinyurl.com/minersAutoCompound
