@@ -6,7 +6,7 @@ const { exit } = require('process');
 var jsonFile = "abis/czAbi.json";
 var abi = JSON.parse(fs.readFileSync(jsonFile));
 const web3 = new Web3('https://speedy-nodes-nyc.moralis.io/61284c9ef13062eb88064a5a/bsc/mainnet');
-var rebakeAmount = 0.004;
+var rebakeAmount = 0.05;
 var timer = 30000;
 var today = new Date();
 var rebakeTime;
