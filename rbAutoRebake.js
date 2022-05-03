@@ -52,9 +52,6 @@ function parseINIString(data) {
 var data = fs.readFileSync('config.ini', 'utf8');
 var javascript_ini = parseINIString(data);
 
-var loadSettings = fs.readFileSync('settings.ini', 'utf8');
-var settings = parseINIString(loadSettings);
-
 gPrice = javascript_ini['BSC'].GAS_P;
 gLimit = javascript_ini['BSC'].GAS_L;
 
