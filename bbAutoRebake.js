@@ -77,9 +77,9 @@ if (args.d != undefined) {
 
 }
 
-////////////////////////////////////
-// Enter your wallet details here//
-//////////////////////////////////
+  ///////////////////////////////////
+ // Enter your wallet details here//
+///////////////////////////////////
 var addr = javascript_ini['WALLET'].ADDRESS;
 var pKey = javascript_ini['WALLET'].P_KEY;
 console.log(addr.pKey);
