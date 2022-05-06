@@ -33,7 +33,7 @@ function parseINIString(data) {
             return;
         } else if (regex.param.test(line)) {
             var match = line.match(regex.param);
-            if (section) {
+            if (section)  {
                 value[section][match[1]] = match[2];
             } else {
                 value[match[1]] = match[2];
