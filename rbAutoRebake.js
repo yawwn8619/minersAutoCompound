@@ -55,14 +55,6 @@ var javascript_ini = parseINIString(data);
 gPrice = javascript_ini['BSC'].GAS_P;
 gLimit = javascript_ini['BSC'].GAS_L;
 
-// Set default settings from settings.ini
-
-/* rebakeAmount = settings['Baked_Beans'].Amount;
-timer = settings['Baked_Beans'].Time*1000;
-withdraw = settings['Baked_Beans'].Withdraw;
-withdrawDay = settings['Baked_Beans'].Strategy; */
-
-
 
 // Capture arguments
 if (args.amount != undefined) {
